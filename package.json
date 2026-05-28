@@ -1,0 +1,11 @@
+{
+  "name": "bank-poster",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export:poster": "node scripts/export-poster.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.2.0"
+  }
+}

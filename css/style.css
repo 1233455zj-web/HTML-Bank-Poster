@@ -1,0 +1,479 @@
+/* 湖南银行代销资管信托排期表 */
+@font-face {
+  font-family: "Alimama DongFang DaKai";
+  src: url("../fonts/阿里妈妈东方大楷.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --paper: #f3ebe0;
+  --brown-dark: #6b3f24;
+  --brown-mid: #8b5a2b;
+  --brown-title: #7a4a28;
+  --brown-pill: #b8895a;
+  --gold: #c69c6d;
+  --tan-header: #f0e4d4;
+  --tan-border: #e8d9c8;
+  --text: #4a3428;
+  --text-muted: #8a7568;
+  --red: #c53b2a;
+  --white: #ffffff;
+  --shadow: 0 6px 20px rgba(74, 52, 40, 0.12);
+  --radius-card: 14px;
+  --poster-width: 750px;
+  --poster-padding-x: 20px;
+  --font-title: "Alimama DongFang DaKai", "STKaiti", "KaiTi", serif;
+  --title-color: #8f4e2e;
+  --section-gap: 32px;
+  --title-sub-size: 40px;
+  --title-main-size: 52px;
+  --title-line-gap: 14px;
+  --title-date-gap: 22px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  background-color: var(--paper);
+  /* 宣纸纹理纵向平铺：底色 + 纤维噪点 + 柔和晕染 */
+  background-image:
+    url("../assets/paper-texture.svg"),
+    radial-gradient(ellipse 120% 80% at 15% 0%, rgba(210, 180, 140, 0.18), transparent 55%),
+    radial-gradient(ellipse 100% 70% at 85% 100%, rgba(190, 160, 120, 0.12), transparent 50%);
+  background-repeat: repeat-y, no-repeat, no-repeat;
+  background-size: 100% auto, 100% 40vh, 100% 40vh;
+  background-attachment: scroll, fixed, fixed;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.page__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: var(--poster-width);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px var(--poster-padding-x) 40px;
+  gap: var(--section-gap);
+}
+
+.product-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+  width: 100%;
+}
+
+/* ========== Header（750px 海报版式） ========== */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.header__top {
+  width: 100%;
+  line-height: 0;
+}
+
+.header__logo {
+  display: block;
+  width: 268px;
+  max-width: 100%;
+  height: auto;
+}
+
+.header__title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  gap: var(--title-date-gap);
+  text-align: center;
+}
+
+.header__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--title-line-gap);
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-title);
+  font-weight: normal;
+  line-height: 1.15;
+}
+
+.header__title-line {
+  display: block;
+  color: var(--title-color);
+  white-space: nowrap;
+}
+
+/* 参考图：上行略小，下行主标题更大 */
+.header__title-line--sub {
+  font-size: var(--title-sub-size);
+  letter-spacing: 0.14em;
+}
+
+.header__title-line--main {
+  font-size: var(--title-main-size);
+  letter-spacing: 0.08em;
+}
+
+.header__date {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 7px 32px;
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: normal;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  color: var(--white);
+  background: linear-gradient(180deg, #d4ad78 0%, var(--gold) 48%, #b8895a 100%);
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(107, 63, 36, 0.18);
+}
+
+/* ========== Product Card ========== */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1px solid rgba(232, 217, 200, 0.9);
+}
+
+.card__title {
+  position: relative;
+  margin: 0;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  font-size: clamp(1rem, 3.2vw, 1.15rem);
+  font-weight: 700;
+  color: var(--white);
+  background: linear-gradient(180deg, #8f5c35 0%, var(--brown-title) 45%, #6b3f24 100%);
+  letter-spacing: 0.12em;
+}
+
+.card__title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 8px solid #6b3f24;
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.5rem 0.5rem;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(0.68rem, 2vw, 0.78rem);
+  table-layout: auto;
+}
+
+.product-table thead th {
+  background: var(--tan-header);
+  color: var(--brown-dark);
+  font-weight: 600;
+  padding: 0.55rem 0.35rem;
+  border: 1px solid var(--tan-border);
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.product-table tbody td {
+  padding: 0.5rem 0.35rem;
+  border: 1px solid var(--tan-border);
+  text-align: center;
+  vertical-align: middle;
+  color: var(--text);
+}
+
+.product-table tbody tr:nth-child(even) {
+  background: #faf7f3;
+}
+
+.product-table .col-term {
+  font-weight: 600;
+  color: var(--brown-dark);
+  white-space: nowrap;
+  min-width: 3.2em;
+}
+
+.product-table .col-name {
+  text-align: left;
+  white-space: nowrap;
+  min-width: 10em;
+  max-width: 22em;
+}
+
+.product-table .col-benchmark {
+  white-space: nowrap;
+  color: var(--brown-mid);
+  font-weight: 600;
+}
+
+.product-table .col-return {
+  white-space: nowrap;
+}
+
+.product-table .col-return.is-first {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.product-table .col-return.is-normal {
+  color: var(--brown-mid);
+  font-weight: 600;
+}
+
+.card__note {
+  margin: 0.5rem 0.25rem 0;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.45;
+}
+
+/* ========== Tips ========== */
+.tips {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 10px;
+  padding: 1.25rem 1.15rem 1rem;
+  border: 1px dashed var(--tan-border);
+  margin-top: 0.25rem;
+}
+
+.tips__title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brown-dark);
+  letter-spacing: 0.2em;
+}
+
+.tips__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.72rem;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.tips__list li {
+  margin-bottom: 0.35rem;
+}
+
+.tips__list .em-red {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ========== Footer ========== */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0.75rem 0.25rem 0;
+  margin-top: 0.25rem;
+}
+
+.footer__main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.footer__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.footer__hotline-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.footer__hotline {
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 800;
+  color: var(--brown-dark);
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.footer__site {
+  font-size: 0.8rem;
+  color: var(--brown-mid);
+  text-decoration: none;
+}
+
+.footer__site:hover {
+  text-decoration: underline;
+}
+
+.footer__qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer__qr-box {
+  width: 88px;
+  height: 88px;
+  background: #fff;
+  border: 2px solid var(--tan-border);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+}
+
+.footer__qr-placeholder {
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(0deg, #333 0 2px, #fff 2px 4px),
+    repeating-linear-gradient(90deg, #333 0 2px, #fff 2px 4px);
+  background-size: 8px 8px;
+  opacity: 0.85;
+}
+
+.footer__qr-caption {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.footer__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.card-chip {
+  width: clamp(72px, 18vw, 110px);
+  height: 44px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: flex-end;
+  padding: 4px 6px;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.card-chip--silver {
+  background: linear-gradient(135deg, #d4d4d4, #9a9a9a);
+  color: #333;
+}
+
+.card-chip--red {
+  background: linear-gradient(135deg, #e85a4f, #a82820);
+}
+
+.card-chip--blue {
+  background: linear-gradient(135deg, #4a7fc1, #2a4f8a);
+}
+
+.card-chip--black {
+  background: linear-gradient(135deg, #4a4a4a, #1a1a1a);
+}
+
+.card-chip--gold {
+  background: linear-gradient(135deg, #d4af37, #8b6914);
+}
+
+/* ========== 小屏等比缩放（基准 750px） ========== */
+@media (max-width: 749px) {
+  .page__inner {
+    width: 100%;
+    padding-left: max(12px, var(--poster-padding-x));
+    padding-right: max(12px, var(--poster-padding-x));
+  }
+
+  .header__logo {
+    width: calc(268 / 750 * 100vw);
+  }
+
+  .header__title-line--sub {
+    font-size: calc(40px * 100vw / 750);
+  }
+
+  .header__title-line--main {
+    font-size: calc(52px * 100vw / 750);
+  }
+
+  .header__date {
+    font-size: calc(22px * 100vw / 750);
+    padding: calc(7px * 100vw / 750) calc(32px * 100vw / 750);
+  }
+
+  .header__title-group {
+    margin-top: calc(20px * 100vw / 750);
+    gap: calc(22px * 100vw / 750);
+  }
+
+  .header__title {
+    gap: calc(14px * 100vw / 750);
+  }
+}

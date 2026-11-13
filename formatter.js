@@ -20,6 +20,9 @@ const FORMATTER_CONFIG = {
       "含「集合资产管理计划」：在「号」后换行，整段计划名称在下一行",
       "含「集合资金信托计划」：在「资金信托计划」前断行，「集合」留在代号行（见图1）",
       "特例「开元湘盛…号集合资金信托计划」且后缀含多个括号（如（第1期）（到期））：号后、计划名后各换行，括号段单独成行；括号段使用半角括号，段间一个空格（如 (第1期) (到期)）",
+      "特例「湘信聚财-传承尊享…号集合资金信托计划（第N期）（财富管理服务信托专属）」：三行排版以契合名称列宽度——「湘信聚财-传承尊享 N 号」/「集合资金信托计划(第N期)」（期次半角括号）/「（财富管理服务信托专属）」",
+      "特例「湘信聚合…字母数字代号…号集合资金信托计划」且后缀含括号（如（第二期)（到期））：三行——「湘信聚合 代号 号」/「集合资金信托计划」/原括号后缀",
+      "特例「…N个月定期开放M期集合资产管理计划」（期次无括号）：两行——「品牌 N 个月定期开放」/「M 期集合资产管理计划」",
       "特例「华福安泰福湘…号集合资金信托计划」：「集合」与代号同一行，在「资金信托计划」前断行",
       "信托计划且代号含字母：品牌名单独一行；代号仅数字：品牌与代号同一行",
       "「首创证券创赢…」类名称去掉首部「首创证券」，保留创赢…主体",
@@ -46,12 +49,20 @@ const FORMATTER_CONFIG = {
         output: "湘信聚合\nZX24M002 号集合\n资金信托计划",
       },
       {
+        input: "湘信聚合ZX12M001号集合资金信托计划（第二期)（到期）",
+        output: "湘信聚合 ZX12M001 号\n集合资金信托计划\n（第二期)（到期）",
+      },
+      {
         input: "湘信金鹏HN18M003号集合资金信托计划（第七期）",
         output: "湘信金鹏\nHN18M003 号集合\n资金信托计划（第七期）",
       },
       {
         input: "开元湘盛4号集合资金信托计划（第1期）（到期）",
         output: "开元湘盛 4 号\n集合资金信托计划\n(第1期) (到期)",
+      },
+      {
+        input: "湘信聚财-传承尊享1号集合资金信托计划（第二期）（财富管理服务信托专属）",
+        output: "湘信聚财-传承尊享 1 号\n集合资金信托计划(第二期)\n（财富管理服务信托专属）",
       },
       {
         input: "华鑫信托-开元湘盛4号集合资金信托计划（第1期）（到期）",
@@ -77,6 +88,18 @@ const FORMATTER_CONFIG = {
         manager: "财信证券",
         output: "年年鑫 1 号\n集合资产管理计划",
       },
+      {
+        input: "财富6个月定期开放(002期)集合资产管理计划",
+        output: "财富 6 个月\n定期开放 (002期)\n集合资产管理计划",
+      },
+      {
+        input: "财富12个月定期开放（004期）集合资产管理计划",
+        output: "财富 12 个月\n定期开放 (004期)\n集合资产管理计划",
+      },
+      {
+        input: "财富24个月定期开放619期集合资产管理计划",
+        output: "财富 24 个月定期开放\n619 期集合资产管理计划",
+      },
     ],
   },
 
@@ -95,6 +118,13 @@ const FORMATTER_CONFIG = {
       "3年",
     ],
     rules: ["统一格式为：1个月、3个月、6个月、9个月、1年、1年半、2年、3年", "不要带括号和英文"],
+    display: {
+      pureBondVertical: true,
+      rules: [
+        "纯债产品区块：表格正文「期限」列竖排（逐字换行），表头「期限」保持横排",
+        "固收增强、固收+及其他区块：期限列正文保持横排",
+      ],
+    },
   },
 
   /** 2. 风险等级字段 */
@@ -512,12 +542,65 @@ function tryProductNameSpecialCase(text) {
     );
   }
 
+  /** 传承尊享：三行排版契合名称列（约 146px） */
+  const chuancheng = t.match(
+    /^湘信聚财-传承尊享(\d+)\s*号集合资金信托计划[（(]([^）)]+)[）)]\s*[（(]财富管理服务信托专属[）)]$/
+  );
+  if (chuancheng) {
+    const [, num, period] = chuancheng;
+    return (
+      `${escapeHtml("湘信聚财-传承尊享")} <span class="nobreak">${escapeHtml(`${num} 号`)}</span><br>` +
+      `${escapeHtml(`集合资金信托计划(${period})`)}<br>` +
+      escapeHtml("（财富管理服务信托专属）")
+    );
+  }
+
+  /** 湘信聚合 + 字母代号 + 括号后缀：号后换行，计划名与括号段各占一行 */
+  const juhhe = t.match(
+    /^湘信聚合([A-Za-z]+\d+[A-Za-z0-9]*)\s*号集合资金信托计划((?:[（(][^）)]*[）)])+)$/
+  );
+  if (juhhe) {
+    const [, code, suffix] = juhhe;
+    return (
+      `${escapeHtml("湘信聚合")} <span class="nobreak">${escapeHtml(`${code} 号`)}</span><br>` +
+      `${escapeHtml("集合资金信托计划")}<br>` +
+      escapeHtml(suffix)
+    );
+  }
+
   const huafu = t.match(/^华福安泰福湘(\d+)\s*号集合资金信托计划(.*)$/);
   if (huafu) {
     const [, num, tail] = huafu;
     return (
       `${escapeHtml("华福安泰福湘")} <span class="nobreak">${escapeHtml(`${num} 号集合`)}</span><br>` +
       escapeHtml(`资金信托计划${tail}`)
+    );
+  }
+
+  const termOpenAm = t.match(
+    /^(.+?)(\d+)个月定期开放([（(][^）)]*[）)])集合资产管理计划$/
+  );
+  if (termOpenAm) {
+    const [, brand, num, paren] = termOpenAm;
+    const normalizedParen = String(paren)
+      .replace(/（/g, "(")
+      .replace(/）/g, ")");
+    return (
+      `${escapeHtml(`${brand.trim()} ${num} 个月`)}<br>` +
+      `${escapeHtml(`定期开放 ${normalizedParen}`)}<br>` +
+      escapeHtml(AM_PLAN_CORE)
+    );
+  }
+
+  /** 无括号期次：财富 24 个月定期开放 / 619 期集合资产管理计划 */
+  const termOpenAmBare = t.match(
+    /^(.+?)(\d+)个月定期开放(\d+)\s*期集合资产管理计划$/
+  );
+  if (termOpenAmBare) {
+    const [, brand, months, period] = termOpenAmBare;
+    return (
+      `${escapeHtml(`${brand.trim()} ${months} 个月定期开放`)}<br>` +
+      escapeHtml(`${period} 期集合资产管理计划`)
     );
   }
 
@@ -572,16 +655,26 @@ const FORMATTERS = {
     return formatProductNameAmPlan(parsed, AM_PLAN_CORE + planTail);
   },
 
-  /** 1. 期限：去括号/英文，保留规范写法 */
-  term(value) {
+  /** 1. 期限：去括号/英文，保留规范写法；纯债区块正文可竖排 */
+  term(value, options = {}) {
     if (value == null || value === "") return "";
-    return escapeHtml(
-      String(value)
-        .trim()
-        .replace(/[（(][^）)]*[）)]/g, "")
-        .replace(/[A-Za-z]+/g, "")
-        .trim()
-    );
+    const text = String(value)
+      .trim()
+      .replace(/[（(][^）)]*[）)]/g, "")
+      .replace(/[A-Za-z]+/g, "")
+      .trim();
+    if (!text) return "";
+    if (options.vertical) {
+      return [...text]
+        .map((ch) => `<span class="term-char">${escapeHtml(ch)}</span>`)
+        .join("");
+    }
+    return escapeHtml(text);
+  },
+
+  /** 纯债产品区块：期限列正文竖排（表头不变） */
+  termVerticalForSection(title) {
+    return SECTION_SORT_KEYS[title] === "pureBond";
   },
 
   /** 2. 风险等级：半角括号、右括号前无空格、单行 */
@@ -726,7 +819,10 @@ const FORMATTERS = {
       .map((row, index) => ({
         row,
         term: row.term || effectiveTermAt(products, index),
-        tradeStart: parseTradeStartSortKey(row.tradeTime || ""),
+        tradeStart:
+          row.sortStart != null
+            ? row.sortStart
+            : parseTradeStartSortKey(row.tradeTime || ""),
       }))
       .sort((a, b) => {
         const byTerm = termRank(a.term) - termRank(b.term);

@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>湖南银行代销 资管信托排期表</title>
+  <style>
+    /* ============================================================
+       湖南银行代销资管信托排期表 · 像素级还原
+       画布 750px | 长图背景顶对齐 | 本地 images/ 素材
+       ============================================================ */
+
+    @font-face {
+      font-family: "Alimama DongFang DaKai";
+      src: url("fonts/阿里妈妈东方大楷.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "MiSans";
+      src: url("fonts/MiSans-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "MiSans";
+      src: url("fonts/MiSans-Semibold.ttf") format("truetype");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "MiSans";
+      src: url("fonts/MiSans-Bold.ttf") format("truetype");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background: #d8cfc4;
+      font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+      color: #4a3428;
+      line-height: 1.45;
+    }
+
+    /* 视口等比缩放容器：设计稿 750px 宽，按 window.innerWidth 铺满屏宽 */
+    #poster-scale-host {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ---------- 1. 全局长背景（2x 素材按设计稿 750px 宽等比缩小） ---------- */
+    #poster-wrapper {
+      width: 750px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      transform-origin: top center;
+      will-change: transform;
+      background-image: url("images/full_background.png");
+      background-repeat: no-repeat;
+      background-position: top center;
+      /* 源图 1522×8684（@2x），显示宽度 750px ≈ 50% 缩放，高清不放大 */
+      background-size: 750px auto;
+      --grid-cols: 48px 146px 56px 88px 64px 82px 88px 88px;
+      /* 规范空格：相对普通空格缩小 20%（0.25em × 0.8） */
+      --fmt-space-width: 0.2em;
+      --card-radius: 28px;
+      --table-radius: 8px;
+      --gold-base: #f9d8b0;
+      /* 表格配色（对齐参考图） */
+      --table-header-bg: #e9b58d;
+      --table-term-bg: #f1d2be;
+      --table-body-bg: #fceee5;
+      --table-border: #ffffff;
+      --table-outer-border: #e9b58d;
+      --table-border-width: 0.5px;
+      --table-header-text: #784d35;
+      --table-body-text: #030303;
+      --table-first-issue: #ff0000;
+      /* 封底纹样 @2x 2477×4455，与主背景同按 750px 宽缩放 */
+      --tail-pattern-width: 750px;
+      --tail-pattern-height: calc(4455 * 750px / 2477);
+    }
+
+    /* 第二层背景：封底纹样贴海报底边，随内容高度下移，不占文档流 */
+    #poster-wrapper::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: var(--tail-pattern-width);
+      height: var(--tail-pattern-height);
+      background-image: url("images/poster_tail_pattern.png");
+      background-repeat: no-repeat;
+      background-position: bottom center;
+      background-size: var(--tail-pattern-width) auto;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ---------- 2. 顶栏标题区（522×173，距顶 83 / 距左 32） ---------- */
+    .poster-header {
+      position: relative;
+      z-index: 2;
+      padding: 83px 0 0 32px;
+      text-align: left;
+      pointer-events: none;
+    }
+
+    .poster-header__title {
+      width: 522px;
+      height: 173px;
+      margin: 0;
+      font-family: "Alimama DongFang DaKai", "STKaiti", "KaiTi", serif;
+      font-size: 60px;
+      font-weight: 400;
+      letter-spacing: -0.05em;
+      line-height: 76px;
+      text-align: left;
+    }
+
+    /* 标题 / 日期：SVG 渐变 + 滤镜（内阴影不走 drop-shadow） */
+    .poster-header__line-svg,
+    .poster-header__date-svg {
+      display: block;
+      overflow: visible;
+    }
+
+    .poster-header__line-svg {
+      width: 522px;
+      height: 76px;
+    }
+
+    .poster-header__date-svg {
+      width: 164px;
+      height: 28px;
+    }
+
+    .poster-filters {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* ---------- 日期组件：164×28，距顶 260px 水平居中 ---------- */
+    .poster-header__date {
+      position: absolute;
+      top: 260px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      width: 164px;
+      height: 28px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eccfad;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .poster-header__date-inner {
+      position: relative;
+      display: block;
+      width: 164px;
+      height: 28px;
+    }
+
+    /* 日期底 260+28=288px，与首卡间距 18px → main 内容区顶 306px；header 占 83+173=256px */
+    .poster-main {
+      position: relative;
+      z-index: 2;
+      padding: 50px 29px 0;
+    }
+
+    /* ---------- 3. 外卡片 692px + 五层金色内描边（design.md §3） ---------- */
+    .poster-card {
+      position: relative;
+      width: 692px;
+      margin: 0 auto 28px;
+      border-radius: var(--card-radius);
+      background: #fff3d9;
+      overflow: visible;
+    }
+
+    .poster-card:last-of-type {
+      margin-bottom: 0;
+    }
+
+    /* 4×Linear 渐变叠层 + 1×#F9D8B0 实色衬底，Inside 3px */
+    .poster-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--card-radius);
+      pointer-events: none;
+      z-index: 4;
+      padding: 3px;
+      background:
+        linear-gradient(180deg, rgba(248, 214, 173, 0) 30%, #ffa640 58%, #ffe5c7 81%, #f7aa52 100%),
+        linear-gradient(180deg, rgba(247, 208, 161, 0) 89%, #f7aa52 100%),
+        linear-gradient(180deg, rgba(248, 207, 161, 0) 7%, #ffe5c7 27%, #ffa640 50%, #f8d6ad 89%),
+        linear-gradient(180deg, rgba(247, 208, 161, 0) 11%, #f7aa52 88%),
+        var(--gold-base);
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+    }
+
+    .poster-card__inner {
+      position: relative;
+      z-index: 1;
+      border-radius: var(--card-radius);
+      background: #fff3d9;
+      padding: 56px 16px 16px;
+      overflow: hidden;
+    }
+
+    /* ---------- 4. 分类标题条：红棕弧边 PNG，文字代码渲染 ---------- */
+    .card-title {
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 383px;
+      height: 51px;
+      background-image: url("images/title_bar.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 6;
+    }
+
+    .card-title__text {
+      font-family: "Alimama DongFang DaKai", "STKaiti", "KaiTi", serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: #ffffff;
+      letter-spacing: 0.17em;
+      line-height: 1;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+    }
+
+    /* 表格外壳：0.5px #E9B58D 描边 + 圆角裁切 */
+    .table-shell {
+      width: 660px;
+      border-radius: var(--table-radius);
+      overflow: hidden;
+      border: var(--table-border-width) solid var(--table-outer-border);
+      background: var(--table-body-bg);
+    }
+
+    /* ---------- 5. 表格 CSS Grid 八列（总宽 660px） ---------- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: var(--grid-cols);
+      grid-template-rows: 32px;
+      grid-auto-rows: 52px;
+      width: 660px;
+      font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--table-body-text);
+      letter-spacing: 0;
+      border: none;
+      background: var(--table-body-bg);
+    }
+
+    .product-grid__th {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3px 2px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--table-header-text);
+      letter-spacing: -0.02em;
+      background: var(--table-header-bg);
+      border-right: var(--table-border-width) solid var(--table-border);
+      border-bottom: var(--table-border-width) solid var(--table-border);
+      line-height: 1.2;
+      height: 32px;
+      min-height: 32px;
+      word-break: keep-all;
+      white-space: normal;
+    }
+
+    .product-grid__td {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      text-align: center;
+      padding: 4px 3px;
+      font-size: 11px;
+      min-width: 0;
+      height: 100%;
+      min-height: 52px;
+      background: var(--table-body-bg);
+      border-right: var(--table-border-width) solid var(--table-border);
+      border-bottom: var(--table-border-width) solid var(--table-border);
+      line-height: 1.3;
+      writing-mode: horizontal-tb;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      color: var(--table-body-text);
+    }
+
+    .product-grid__cell-inner {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      text-align: center;
+      line-height: 1.3;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .product-grid__td--term {
+      color: var(--table-body-text);
+      background: var(--table-term-bg);
+      letter-spacing: 0;
+    }
+
+    /* 风险等级：规范要求单行、半角括号 */
+    .product-grid__td--risk .product-grid__cell-inner {
+      white-space: nowrap;
+    }
+
+    /* 规范空格：宽度为普通空格的 80%（formatter.js applyTightSpaces） */
+    .fmt-space {
+      display: inline-block;
+      width: var(--fmt-space-width);
+      height: 0;
+      vertical-align: baseline;
+    }
+
+    .cell-single-line {
+      white-space: nowrap;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .product-grid__td--benchmark .product-grid__cell-inner,
+    .product-grid__td--return .product-grid__cell-inner,
+    .product-grid__td--time .product-grid__cell-inner,
+    .product-grid__td--amount .product-grid__cell-inner {
+      white-space: nowrap;
+    }
+
+    /* 多行合并的期限侧栏（参考图 1） */
+    .product-grid__td--term-merged {
+      align-self: stretch;
+    }
+
+    .product-grid__td--term-merged .product-grid__cell-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    /* 纯债产品：期限列正文竖排（表头「期限」保持横排） */
+    .product-grid--pure-bond-term .product-grid__td--term .product-grid__cell-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.15;
+    }
+
+    .product-grid--pure-bond-term .product-grid__td--term .term-char {
+      display: block;
+      line-height: 1.15;
+    }
+
+    .product-grid__td--return.is-first-issue {
+      color: var(--table-first-issue);
+    }
+
+    .product-grid__td--return.is-first-period {
+      font-weight: 700;
+      color: var(--table-body-text);
+    }
+
+    .product-grid__td.is-even-row {
+      background: var(--table-body-bg);
+    }
+
+    .product-grid__td--term.is-even-row {
+      background: var(--table-term-bg);
+    }
+
+    /* ---------- 6. 产品编号防断行 ---------- */
+    .nobreak {
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    /* ---------- 卡片底部备注（与 table-shell 左对齐） ---------- */
+    .poster-card__note {
+      width: 660px;
+      max-width: 100%;
+      min-height: 16px;
+      margin-top: 10px;
+      margin-left: 0;
+      margin-bottom: 0;
+      padding: 0;
+      font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      color: #000000;
+      letter-spacing: -0.06em;
+      text-align: left;
+      line-height: 1.65;
+    }
+
+    /* 末卡「提示」列表（间距参考图 1） */
+    .poster-card__tips {
+      width: 660px;
+      max-width: 100%;
+      margin-top: 0px;
+      margin-left: 0;
+      padding: 0;
+      border-top: none;
+      background: transparent;
+      text-align: left;
+    }
+
+    .poster-card__tips-title {
+      font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      color: #000000;
+      letter-spacing: -0.06em;
+      line-height: 1.65;
+      margin-bottom: 0;
+    }
+
+    .poster-card__tips-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-family: "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: #000000;
+      letter-spacing: -0.06em;
+    }
+
+    .poster-card__tips-list li {
+      margin-bottom: 0px;
+      text-align: left;
+    }
+
+    .poster-card__tips-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .poster-card__tips-list .tips-item--red {
+      color: #ff0000;
+    }
+
+    /* ---------- 页脚横幅：源图 @2x 1090×212，显示 545×106（与卡片右对齐） ---------- */
+    .poster-footer {
+      position: relative;
+      z-index: 2;
+      width: 750px;
+      margin: 40px auto 0;
+      padding: 0 29px 112px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .poster-footer__banner {
+      display: block;
+      width: 545px;
+      height: 106px;
+      max-width: 545px;
+      max-height: 106px;
+      flex-shrink: 0;
+      object-fit: fill;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="poster-scale-host">
+  <!-- 海报根容器：750px 定宽，主背景顶对齐 + ::after 封底纹样贴底，高度由内容撑开 -->
+  <div id="poster-wrapper">
+    <svg class="poster-filters" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- 标题：内容内阴影 #A96628 Y1 blur0.5 + 外阴影 #FFFFFF X1 Y1 blur0 -->
+        <filter id="poster-title-filter" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="titleBlur" />
+          <feOffset in="titleBlur" dx="0" dy="1" result="titleOffset" />
+          <feComposite in="SourceGraphic" in2="titleOffset" operator="out" result="titleInverse" />
+          <feFlood flood-color="#a96628" flood-opacity="1" result="titleFlood" />
+          <feComposite in="titleFlood" in2="titleInverse" operator="in" result="titleInner" />
+          <feDropShadow in="SourceAlpha" dx="1" dy="1" stdDeviation="0" flood-color="#ffffff" flood-opacity="1" result="titleOuter" />
+          <feMerge>
+            <feMergeNode in="titleOuter" />
+            <feMergeNode in="titleInner" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <!-- 日期：内阴影 #A96628 Y0.7 blur0.2 -->
+        <filter id="poster-date-filter" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="0.2" result="dateBlur" />
+          <feOffset in="dateBlur" dx="0" dy="0.7" result="dateOffset" />
+          <feComposite in="SourceGraphic" in2="dateOffset" operator="out" result="dateInverse" />
+          <feFlood flood-color="#a96628" flood-opacity="1" result="dateFlood" />
+          <feComposite in="dateFlood" in2="dateInverse" operator="in" result="dateInner" />
+          <feMerge>
+            <feMergeNode in="dateInner" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+    </svg>
+    <header class="poster-header" aria-label="排期表标题">
+      <h1 class="poster-header__title" id="poster-title"></h1>
+    </header>
+    <p class="poster-header__date" id="poster-date" aria-live="polite"></p>
+
+    <main class="poster-main" id="poster-main" aria-label="产品排期"></main>
+
+    <footer class="poster-footer" aria-label="页脚信息">
+      <img
+        class="poster-footer__banner"
+        src="images/footer_banner.png"
+        alt="湖南银行卡片与二维码"
+        width="545"
+        height="106"
+        decoding="async"
+      />
+    </footer>
+  </div>
+  </div>
+
+  <script src="formatter.js"></script>
+  <script>
+    /* ============================================================
+       数据驱动渲染 · 排期表核心脚本
+       ============================================================ */
+
+    /** 表头八列（与 CSS --grid-cols 一一对应；<br> 用于参考图双行排版） */
+    const TABLE_HEADERS = [
+      "期限",
+      "产品名称",
+      "产品<br>管理人",
+      "风险<br>等级",
+      "起购<br>金额",
+      "交易<br>时间",
+      "业绩报酬<br>计提基准",
+      "上期<br>兑付收益",
+    ];
+
+    /** HTML 转义，防止 XSS */
+    function escapeHtml(str) {
+      return FORMATTERS.escapeHtml(str);
+    }
+
+    /**
+     * 渲染单张产品卡片
+     * @param {object} section - { title, products, note, tips? }
+     */
+    function renderCard(section) {
+      const { title, note, tips } = section;
+      let { products } = section;
+      const sortKey = FORMATTERS.sortKeyForSection(title);
+      if (sortKey) {
+        products = FORMATTERS.sortProducts(products, sortKey);
+      }
+
+      const headerCells = TABLE_HEADERS.map(
+        (label) => `<div class="product-grid__th" role="columnheader">${label}</div>`
+      ).join("");
+
+      const termVertical = FORMATTERS.termVerticalForSection(title);
+      const bodyCells = renderProductRows(products, termVertical);
+      const gridClass = termVertical ? " product-grid--pure-bond-term" : "";
+
+      const tipsHtml = tips && tips.length
+        ? `<div class="poster-card__tips">
+            <div class="poster-card__tips-title">提示：</div>
+            <ol class="poster-card__tips-list">${tips
+              .map((item, i) => {
+                const n = i + 1;
+                if (typeof item === "string") {
+                  return `<li>${n}.${escapeHtml(item)}</li>`;
+                }
+                /* 参考图：第1条前半黑字，合格投资者认定标准起标红 */
+                if (item.redSuffix) {
+                  return `<li>${n}.${escapeHtml(item.text)}<span class="tips-item--red">${escapeHtml(item.redSuffix)}</span></li>`;
+                }
+                if (item.red) {
+                  return `<li class="tips-item--red">${n}.${escapeHtml(item.text)}</li>`;
+                }
+                return `<li>${n}.${escapeHtml(item.text)}</li>`;
+              })
+              .join("")}</ol>
+          </div>`
+        : "";
+
+      return `
+        <article class="poster-card">
+          <div class="card-title">
+            <span class="card-title__text">${escapeHtml(title)}</span>
+          </div>
+          <div class="poster-card__inner">
+            <div class="table-shell">
+              <div class="product-grid${gridClass}" role="table" aria-label="${escapeHtml(title)}">
+                ${headerCells}
+                ${bodyCells}
+              </div>
+            </div>
+            <p class="poster-card__note">${escapeHtml(note)}</p>
+            ${tipsHtml}
+          </div>
+        </article>`;
+    }
+
+    /**
+     * 将产品列表铺平为 CSS Grid 单元格（支持 termRowspan 纵向合并）
+     */
+    function effectiveTermAt(products, index) {
+      for (let i = index; i >= 0; i -= 1) {
+        if (products[i].term) return products[i].term;
+      }
+      return "";
+    }
+
+    function renderProductRows(products, termVertical = false) {
+      let html = "";
+      let rowIndex = 0;
+      let gridRowStart = 2; /* 第 1 行是表头 */
+      const termOpts = termVertical ? { vertical: true } : {};
+
+      products.forEach((row) => {
+        const evenClass = rowIndex % 2 === 1 ? " is-even-row" : "";
+        if (row.termRowspan && row.term) {
+          html += cell(
+            FORMATTERS.term(row.term, termOpts),
+            `grid-row: ${gridRowStart} / span ${row.termRowspan}; grid-column: 1;`,
+            `product-grid__td--term product-grid__td--term-merged${evenClass}`
+          );
+        } else if (row.term) {
+          html += cell(
+            FORMATTERS.term(row.term, termOpts),
+            `grid-row: ${gridRowStart}; grid-column: 1;`,
+            `product-grid__td--term${evenClass}`
+          );
+        }
+
+        const lastRet = FORMATTERS.lastReturn(row.lastReturn);
+
+        const fields = [
+          ["name", FORMATTERS.productName(row.name, row.manager), `product-grid__td--name${evenClass}`, 2],
+          ["manager", escapeHtml(row.manager), `product-grid__td${evenClass}`, 3],
+          ["risk", FORMATTERS.riskLevel(row.risk), `product-grid__td--risk${evenClass}`, 4],
+          ["minAmount", FORMATTERS.minAmount(row.minAmount), `product-grid__td--amount${evenClass}`, 5],
+          ["tradeTime", FORMATTERS.tradeTime(row.tradeTime, row.term || effectiveTermAt(products, rowIndex)), `product-grid__td--time${evenClass}`, 6],
+          ["benchmark", FORMATTERS.performanceBenchmark(row.benchmark), `product-grid__td--benchmark${evenClass}`, 7],
+          ["lastReturn", lastRet.html, `product-grid__td--return${lastRet.classSuffix}${evenClass}`, 8],
+        ];
+
+        fields.forEach(([, content, cls, col]) => {
+          html += cell(content, `grid-row: ${gridRowStart}; grid-column: ${col};`, cls);
+        });
+
+        gridRowStart += 1;
+        rowIndex += 1;
+      });
+
+      return html;
+    }
+
+    /** 生成单个 grid 单元格 */
+    function cell(innerHtml, style, className) {
+      return `<div class="product-grid__td ${className}" role="cell" style="${style}"><span class="product-grid__cell-inner">${innerHtml}</span></div>`;
+    }
+
+    /** 标题单行 SVG（渐变 + 真内阴影） */
+    function buildTitleLineSvg(text, gradId) {
+      const safe = escapeHtml(text);
+      return `<svg class="poster-header__line-svg" viewBox="0 0 522 76" role="img" aria-label="${safe}">
+        <defs>
+          <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c75919" />
+            <stop offset="100%" stop-color="#78300a" />
+          </linearGradient>
+        </defs>
+        <text
+          x="0"
+          y="54"
+          font-family="Alimama DongFang DaKai, STKaiti, KaiTi, serif"
+          font-size="60"
+          font-weight="400"
+          letter-spacing="-3"
+          fill="url(#${gradId})"
+          filter="url(#poster-title-filter)"
+        >${safe}</text>
+      </svg>`;
+    }
+
+    /** 日期 SVG（渐变 + 真内阴影） */
+    function buildDateSvg(text, gradId) {
+      const safe = escapeHtml(text);
+      return `<svg class="poster-header__date-svg" viewBox="0 0 164 28" role="img" aria-label="${safe}">
+        <defs>
+          <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c75919" />
+            <stop offset="100%" stop-color="#78300a" />
+          </linearGradient>
+        </defs>
+        <text
+          x="82"
+          y="20"
+          text-anchor="middle"
+          font-family="Alimama DongFang DaKai, STKaiti, KaiTi, serif"
+          font-size="18"
+          font-weight="400"
+          letter-spacing="-0.9"
+          fill="url(#${gradId})"
+          filter="url(#poster-date-filter)"
+        >${safe}</text>
+      </svg>`;
+    }
+
+    /** 渲染页眉标题与日期 */
+    function renderHeader(data) {
+      const titleEl = document.getElementById("poster-title");
+      const dateEl = document.getElementById("poster-date");
+
+      if (titleEl) {
+        titleEl.innerHTML =
+          buildTitleLineSvg(data.titleLine1, "poster-title-grad-1") +
+          buildTitleLineSvg(data.titleLine2, "poster-title-grad-2");
+      }
+      if (dateEl) {
+        dateEl.innerHTML = `<span class="poster-header__date-inner">${buildDateSvg(data.dateRange, "poster-date-grad")}</span>`;
+      }
+    }
+
+    /** 渲染全部卡片 */
+    const POSTER_BASE_WIDTH = 750;
+
+    /** 按视口宽度等比缩放海报，使 750px 设计稿横向铺满（参考 H5 全屏效果） */
+    function applyPosterScale() {
+      const host = document.getElementById("poster-scale-host");
+      const wrapper = document.getElementById("poster-wrapper");
+      if (!host || !wrapper) return;
+
+      const scale = window.innerWidth / POSTER_BASE_WIDTH;
+      wrapper.style.transform = scale === 1 ? "" : `scale(${scale})`;
+      host.style.height = `${wrapper.offsetHeight * scale}px`;
+    }
+
+    function schedulePosterScale() {
+      requestAnimationFrame(applyPosterScale);
+    }
+
+    function renderPoster(data) {
+      renderHeader(data);
+      const main = document.getElementById("poster-main");
+      if (main) {
+        main.innerHTML = data.sections.map(renderCard).join("");
+      }
+      schedulePosterScale();
+    }
+
+    /* ============================================================
+       posterData · 全局数据源（按周更新此处即可）
+       ============================================================ */
+    const posterData = {
+      titleLine1: "湖南银行代销",
+      titleLine2: "资管信托9月排期表",
+      dateRange: "9月14日-9月20日",
+
+      sections: [
+        {
+          title: "纯债产品",
+          products: [
+            {
+              term: "每两周",
+              name: "湘赢14D001号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9月21日",
+              benchmark: "1.70%-2.20%",
+              lastReturn: "0.90%",
+            },
+            {
+              term: "1个月",
+              name: "湘赢1M001号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/14 - 9/18",
+              benchmark: "1.90%-2.40%",
+              lastReturn: "2.09%",
+            },
+            {
+              term: "3个月",
+              name: "湘赢3M004号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/8 - 9/14",
+              benchmark: "2.10%-2.60%",
+              lastReturn: "2.37%",
+            },
+            {
+              term: "3个月",
+              name: "湘赢3M007号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/11 - 9/17",
+              benchmark: "2.10%-2.60%",
+              lastReturn: "3.04%",
+            },
+            {
+              term: "3个月",
+              name: "湘赢3M001号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/17 - 9/23",
+              benchmark: "2.10%-2.60%",
+              lastReturn: "2.59%",
+            },
+            {
+              term: "1年",
+              name: "湘信聚财4号集合资金信托计划",
+              manager: "财信信托",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/9 - 9/15",
+              benchmark: "2.30%",
+              lastReturn: "4.10%",
+            },
+            {
+              term: "1年",
+              name: "湘信聚财5号集合资金信托计划",
+              manager: "财信信托",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/18 - 9/24",
+              benchmark: "2.30%",
+              lastReturn: "3.50%",
+            },
+            {
+              term: "1年半",
+              name: "创融37号集合资产管理计划",
+              manager: "首创证券",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/8 - 9/14",
+              benchmark: "2.40%",
+              lastReturn: "5.62%",
+            },
+            {
+              term: "1年半",
+              name: "申乾19号集合资产管理计划",
+              manager: "申港证券",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/16 - 9/22",
+              benchmark: "2.60%-3.00%",
+              lastReturn: "首发",
+            },
+            {
+              term: "1年半",
+              name: "创融45号集合资产管理计划",
+              manager: "首创证券",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/17 - 9/23",
+              benchmark: "2.40%",
+              lastReturn: "5.27%",
+            },
+            {
+              term: "1年半",
+              name: "财富616号集合资产管理计划",
+              manager: "财信证券",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/18 - 9/24",
+              benchmark: "2.40%",
+              lastReturn: "4.74%",
+            },
+            {
+              term: "2年",
+              name: "创融10号集合资产管理计划",
+              manager: "首创证券",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/15 - 9/21",
+              benchmark: "2.60%",
+              lastReturn: "5.59%",
+            },
+          ],
+          note: "注：产品过往业绩不代表其未来表现，不等于产品实际收益，投资须谨慎。",
+        },
+        {
+          title: "固收增强产品",
+          products: [
+            {
+              term: "36个月",
+              name: "湘赢36M047号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/16 - 9/22",
+              benchmark: "3.15%-3.55%",
+              lastReturn: "首发",
+            },
+          ],
+          note: "注：产品过往业绩不代表其未来表现，不等于产品实际收益，投资须谨慎。",
+        },
+        {
+          title: "固收+产品",
+          products: [
+            {
+              term: "12个月",
+              name: "创赢优势策略精选16号集合资产管理计划",
+              manager: "首创证券",
+              risk: "R3（中等风险)",
+              minAmount: "100 万元",
+              tradeTime: "9/8 - 9/14",
+              benchmark: "1.70%-5.60%",
+              lastReturn: "3.88%",
+            },
+            {
+              term: "12个月",
+              name: "创赢优势策略精选214号集合资产管理计划",
+              manager: "首创证券",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/15 - 9/21",
+              benchmark: "1.70%-5.20%",
+              lastReturn: "首发",
+            },
+            {
+              term: "12个月",
+              name: "创赢优势策略精选7号集合资产管理计划",
+              manager: "首创证券",
+              risk: "R3（中等风险)",
+              minAmount: "100 万元",
+              tradeTime: "9/15 - 9/21",
+              benchmark: "1.70%-5.60%",
+              lastReturn: "3.61%",
+            },
+            {
+              term: "12个月",
+              name: "湘信聚合ZX12M001号集合资金信托计划（第二期)（到期）",
+              manager: "财信信托",
+              risk: "R3（中等风险)",
+              minAmount: "/",
+              tradeTime: "9月17日（到期日）",
+              benchmark: "/",
+              lastReturn: "首期运作中",
+            },
+            {
+              term: "18个月",
+              name: "湘信金鹏HN18M004号集合资金信托计划（第二期）",
+              manager: "财信信托",
+              risk: "R3（中等风险)",
+              minAmount: "30 万元",
+              tradeTime: "9/14 - 9/18",
+              benchmark: "2.30%-4.90%",
+              lastReturn: "首发",
+            },
+          ],
+          note: "注：产品过往业绩不代表其未来表现，不等于产品实际收益，投资须谨慎。",
+        },
+        {
+          title: "混合类产品",
+          products: [
+            {
+              term: "18个月",
+              name: "增赢18M003号集合资产管理计划",
+              manager: "华安资管",
+              risk: "R4（中高风险)",
+              minAmount: "40 万元",
+              tradeTime: "9/11 - 9/17",
+              benchmark: "6.50%",
+              lastReturn: "首发",
+            },
+          ],
+          note: "注：产品过往业绩不代表其未来表现，不等于产品实际收益，投资须谨慎。",
+          tips: [
+            {
+              text: "本材料所示资管信托产品均为私募产品，仅供合格投资者参阅，为保证服务质量、控制投资风险，请勿在朋友圈等公开渠道转发。",
+              redSuffix:
+                "合格投资者认定标准为具有不少于2年投资经历，家庭金融资产不低于500万元，或家庭金融净资产不低于300万元或个人近3年年均收入不低于40万元的投资者。",
+            },
+            "业绩报酬计提基准仅是计算管理人业绩报酬的依据，不作为管理人保证投资本金不受损失或取得最低收益的承诺。",
+            "资管信托产品由相应的证券（子）公司、信托公司发行和管理，湖南银行作为代销机构不承担产品的投资、兑付责任。",
+            "最终发行安排以发行通知为准，具体产品要素以产品合同约定为准。",
+            "市场有风险，投资须谨慎。",
+            "本资料不作为任何法律文件，产品详情请以产品说明书为准。",
+          ],
+        },
+      ],
+    };
+
+    /* ---------- 启动渲染 ---------- */
+    function bootPoster() {
+      renderPoster(posterData);
+      schedulePosterScale();
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", bootPoster);
+    } else {
+      bootPoster();
+    }
+
+    window.addEventListener("resize", schedulePosterScale);
+    window.addEventListener("load", schedulePosterScale);
+    document.fonts.ready.then(schedulePosterScale);
+
+    const posterWrapper = document.getElementById("poster-wrapper");
+    if (posterWrapper && typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(schedulePosterScale).observe(posterWrapper);
+    }
+  </script>
+</body>
+</html>

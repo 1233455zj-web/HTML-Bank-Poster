@@ -3,19 +3,19 @@
  */
 
 const SCHEDULE_CONFIG = {
-  titleMonth: 6,
+  titleMonth: 7,
   titleLine1: "湖南银行代销",
-  titleLine2: "资管信托6月排期表",
-  rangeStart: { month: 6, day: 8 },
-  rangeEnd: { month: 6, day: 14 },
+  titleLine2: "资管信托7月排期表",
+  rangeStart: { month: 7, day: 20 },
+  rangeEnd: { month: 7, day: 26 },
   /** 每两周固定产品：每周必展示；交易时间取当周范围内最近开放日（见 formatter.js） */
   biweeklyFixed: {
     name: "湘赢14D001号集合资产管理计划",
     manager: "华安资管",
     openDays: [
-      { month: 6, day: 1 },
-      { month: 6, day: 15 },
-      { month: 6, day: 29 },
+      { month: 7, day: 13 },
+      { month: 7, day: 27 },
+      { month: 8, day: 10 },
     ],
   },
 };
@@ -31,30 +31,33 @@ const TABLE_COLUMNS = [
   { key: "lastReturn", label: "上期兑付收益", className: "col-return" },
 ];
 
-/** 纯债产品 */
+/** 纯债产品（2026年7月20日-7月26日） */
 const pureBondProducts = [
-  { term: "每两周", name: "湘赢14D001号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6月15日", benchmark: "1.70%-2.20%", lastReturn: "1.81%" },
-  { term: "1个月", termRowspan: 2, name: "湘赢1M002号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/2 - 6/8", benchmark: "1.90%-2.40%", lastReturn: "2.65%" },
-  { name: "湘赢1M001号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/12 - 6/18", benchmark: "1.90%-2.40%", lastReturn: "2.07%" },
-  { term: "3个月", termRowspan: 2, name: "湘赢3M004号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/9 - 6/15", benchmark: "2.10%-2.60%", lastReturn: "2.96%" },
-  { name: "湘赢3M007号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/11 - 6/17", benchmark: "2.10%-2.60%", lastReturn: "2.31%" },
-  { term: "9个月", name: "湘信聚财32号集合资金信托计划", manager: "财信信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/2 - 6/8", benchmark: "2.30%", lastReturn: "3.24%" },
-  { term: "1年", termRowspan: 2, name: "财信证券-年年鑫2号集合资产管理计划", manager: "财信证券", risk: "R3（中等风险)", minAmount: "40 万元", tradeTime: "6/5 - 6/11", benchmark: "2.40%", lastReturn: "3.36%" },
-  { name: "财富12个月定期开放（004期）集合资产管理计划", manager: "财信证券", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/5 - 6/12", benchmark: "2.40%", lastReturn: "3.37%" },
-  { term: "1年半", name: "中粮信托-国元元赢2号集合资金信托计划（第2期）", manager: "中粮信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/9 - 6/15", benchmark: "2.90%", lastReturn: "首期运作中" },
-  { term: "2年", termRowspan: 2, name: "湘信聚合SG24M004号集合资金信托计划（第二期）", manager: "财信信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/5 - 6/11", benchmark: "3.00%-3.30%", lastReturn: "首发" },
-  { name: "创融30号集合资产管理计划", manager: "首创证券", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/9 - 6/15", benchmark: "2.90%", lastReturn: "6.18%" },
+  { term: "每两周", name: "湘赢14D001号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7月27日", benchmark: "1.70%-2.20%", lastReturn: "1.57%" },
+  { term: "1个月", name: "湘赢1M001号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/14 - 7/20", benchmark: "1.90%-2.40%", lastReturn: "1.61%" },
+  { term: "3个月", name: "湘赢3M003号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/20 - 7/24", benchmark: "2.10%-2.60%", lastReturn: "2.32%" },
+  { term: "6个月", name: "湘赢6M001号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/20 - 7/24", benchmark: "2.40%", lastReturn: "2.81%" },
+  { term: "6个月", name: "财富6个月定期开放(001期)集合资产管理计划", manager: "财信证券", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/24 - 7/31", benchmark: "2.20%", lastReturn: "1.76%" },
+  { term: "9个月", name: "开元湘盛5号集合资金信托计划（第2期）（到期）", manager: "华鑫信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7月21日（到期日）", benchmark: "/", lastReturn: "首期运作中" },
+  { term: "9个月", name: "财富9个月定期开放(002期)集合资产管理计划", manager: "财信证券", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/14 - 7/20", benchmark: "2.20%", lastReturn: "2.70%" },
+  { term: "1年", name: "湘信聚财1号集合资金信托计划", manager: "财信信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/15 - 7/21", benchmark: "2.40%", lastReturn: "3.38%" },
+  { term: "1年", name: "年年鑫5号集合资产管理计划", manager: "财信证券", risk: "R3（中等风险)", minAmount: "40 万元", tradeTime: "7/21 - 7/27", benchmark: "2.40%", lastReturn: "3.25%" },
+  { term: "1年半", name: "创融31号集合资产管理计划", manager: "首创证券", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/21 - 7/27", benchmark: "2.60%", lastReturn: "5.70%" },
+  { term: "2年", name: "中粮信托-国元元赢3号集合资金信托计划（第1期）", manager: "中粮信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/14 - 7/20", benchmark: "3.00%", lastReturn: "首发" },
+  { term: "2年", name: "创融35号集合资产管理计划", manager: "首创证券", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/16 - 7/22", benchmark: "2.70%", lastReturn: "4.86%" },
 ];
 
 /** 固收增强产品 */
 const fixedIncomeEnhancedProducts = [
-  { term: "36个月", name: "湘赢36M041号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/3 - 6/9", benchmark: "3.30%-3.80%", lastReturn: "首发" },
+  { term: "12个月", name: "国联鑫湘联7号集合资产管理计划", manager: "国联资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/23 - 7/29", benchmark: "2.50%-3.00%", lastReturn: "首发" },
+  { term: "36个月", name: "湘赢36M045号集合资产管理计划", manager: "华安资管", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/16 - 7/22", benchmark: "3.15%-3.55%", lastReturn: "首发" },
 ];
 
 /** 固收+产品 */
 const fixedIncomePlusProducts = [
-  { term: "12个月", name: "创赢优势策略精选9号集合资产管理计划", manager: "首创证券", risk: "R3（中等风险)", minAmount: "100 万元", tradeTime: "6/10 - 6/15", benchmark: "1.80%-5.70%", lastReturn: "3.34%" },
-  { term: "18个月", name: "湘信金鹏HN18M003号集合资金信托计划（第八期）", manager: "财信信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "6/9 - 6/15", benchmark: "2.40%-5.00%", lastReturn: "首发" },
+  { term: "12个月", name: "创赢优势策略精选103号集合资产管理计划", manager: "首创证券", risk: "R3（中等风险)", minAmount: "100 万元", tradeTime: "7/14 - 7/20", benchmark: "1.80%-5.25%", lastReturn: "3.34%" },
+  { term: "12个月", name: "创赢优势策略精选110号集合资产管理计划", manager: "首创证券", risk: "R3（中等风险)", minAmount: "100 万元", tradeTime: "7/21 - 7/27", benchmark: "1.80%-5.25%", lastReturn: "3.77%" },
+  { term: "24个月", name: "湘信金鹏HN24M001号集合资金信托计划（第二期）", manager: "财信信托", risk: "R3（中等风险)", minAmount: "30 万元", tradeTime: "7/14 - 7/20", benchmark: "2.70%-5.00%", lastReturn: "首发" },
 ];
 
 const PRODUCT_SECTIONS = [
@@ -72,7 +75,7 @@ const TIPS_ITEMS = [
     red: true,
     text: "业绩报酬计提基准仅是计算管理人业绩报酬的依据，不作为管理人保证投资本金不受损失或取得最低收益的承诺。",
   },
-  "资管信托产品由相应的证券（子）公司、信托公司发行和管理，湖南银行作为代销机构不承担产品的投资、兑付和风险管理责任。",
+  "资管信托产品由相应的证券（子）公司、信托公司发行和管理，湖南银行作为代销机构不承担产品的投资、兑付责任。",
   "最终发行安排以发行通知为准，具体产品要素以产品合同约定为准。",
   "市场有风险，投资须谨慎。",
 ];
